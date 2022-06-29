@@ -1,18 +1,20 @@
 import Main from "./pages/Main";
-import Header from "./components/Header";
+import ChatList from "./components/ChatList";
+import LeftColumnHeader from "./components/LeftColumnHeader";
+import RightColumnHeader from "./components/RightColumnHeader";
 
 import styles from "./App.module.scss";
-import ChatList from "./components/ChatList";
 
 const App: React.FC = () => {
   return (
     <div className={styles.Main}>
       <div className={styles.LeftColumn}>
-        <Header />
+        <LeftColumnHeader />
         <ChatList />
       </div>
 
       <div className={styles.RightColumn}>
+        <RightColumnHeader />
         <Main />
       </div>
     </div>

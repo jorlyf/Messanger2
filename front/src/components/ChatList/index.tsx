@@ -1,12 +1,14 @@
+import ChatListItem from "./ChatListItem";
+
 const ChatList: React.FC = () => {
   return (
     <div>
-      <p>Вася</p>
-      <p>Леша</p>
-      <p>Клава</p>
-      <p>Дядя</p>
-      <p>Маша</p>
-      <p>Куц</p>
+      <ChatListItem />
+      <ChatListItem />
+      <ChatListItem />
+      <ChatListItem />
+      <ChatListItem />
+      <ChatListItem />
     </div>
   );
 }
