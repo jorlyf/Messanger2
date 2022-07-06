@@ -1,37 +1,46 @@
-﻿using back.Models;
+﻿using back.Contexts;
+using back.Models;
 
 namespace back.Services
 {
 	public class UserService
 	{
-		public List<ChatUser> Users { get; }
+		public SynchronizedCollection<ChatUser> ChatUsers { get; }
 
 		public Action? OnUserAdd;
 		public Action? OnUserRemove;
 		public UserService()
 		{
-			this.Users = new List<ChatUser>();
+			this.ChatUsers = new SynchronizedCollection<ChatUser>();
 		}
 
-		public ChatUser? GetChatUserById(int id) => this.Users.FirstOrDefault(u => u.Id == id);
-		public void AddUser(int id)
+		public ChatUser? GetChatUserById(int id) => this.ChatUsers.FirstOrDefault(u => u.Id == id);
+		public void AddChatUser(int id)
 		{
-			if (IsUserInList(id)) return;
+			if (IsChatUserInCollection(id)) return;
 
-			this.Users.Add(new ChatUser
+			User? user;
+			using (DataContext context = new DataContext())
 			{
-				Id = id
-				// Username =
+				user = context.Users.ToArray().FirstOrDefault(u => u.Id == id);
+			}
+			if (user is null) return;
+
+			this.ChatUsers.Add(new ChatUser
+			{
+				Id = user.Id,
+				Username = user.Username,
+				AvatarUrl = user.AvatarUrl
 			});
 			OnUserAdd?.Invoke();
 		}
-		public void RemoveUser(ChatUser user)
+		public void RemoveChatUser(ChatUser user)
 		{
-			this.Users.Remove(user);
+			this.ChatUsers.Remove(user);
 			OnUserRemove?.Invoke();
 		}
 
-		private bool IsUserInList(int id)
+		private bool IsChatUserInCollection(int id)
 		{
 			if (GetChatUserById(id) is not null) return true;
 			return false;

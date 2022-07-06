@@ -16,3 +16,18 @@ body {
   height: 100%;
   width : 100%;
 }
+
+textarea {
+  resize: none;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+
+  font-size  : 20px;
+  font-family: inherit;
+}
+
+button {
+  border          : 1px solid rgba(0, 0, 0, 0.05);
+  background-color: var(--background-color);
+  font-size       : 16px;
+  cursor          : pointer;
+}
