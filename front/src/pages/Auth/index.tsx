@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import InputField from "../../components/InputField";
-import { useTypedSelector } from "../../hooks";
+import { useAppSelector } from "../../hooks";
 import AuthService from "../../services/AuthService";
 
 import styles from "./Auth.module.scss";
@@ -13,7 +13,8 @@ const Auth: React.FC = () => {
   const [login, setLogin] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
 
-  const isAuthorized = useTypedSelector(state => state.auth.isAuthorized);
+  const isAuthorized = useAppSelector(state => state.auth.isAuthorized);
+  const isLogging = useAppSelector(state => state.auth.isLogging);
 
   const inputValidated = AuthService.validateInput(login, password);
 
@@ -39,6 +40,7 @@ const Auth: React.FC = () => {
             value={login}
             dispatchFunction={setLogin}
             isOneRow={true}
+            disabled={isLogging}
           />
 
           <InputField
@@ -46,12 +48,13 @@ const Auth: React.FC = () => {
             value={password}
             dispatchFunction={setPassword}
             isOneRow={true}
+            disabled={isLogging}
           />
         </div>
 
         <div className={styles.Buttons}>
-          <button onClick={onLogin}disabled={!inputValidated}>Войти</button>
-          <button onClick={onRegistration} disabled={!inputValidated}>Зарегистрироваться</button>
+          <button onClick={onLogin} disabled={!inputValidated || isLogging}>Войти</button>
+          <button onClick={onRegistration} disabled={!inputValidated || isLogging}>Зарегистрироваться</button>
         </div>
 
       </div>

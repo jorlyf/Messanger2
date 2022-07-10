@@ -1,5 +1,5 @@
 export default interface IChatOwner {
   id: number;
-  username: string;
-  avatarUrl: string;
+  username?: string;
+  avatarUrl?: string;
 }
