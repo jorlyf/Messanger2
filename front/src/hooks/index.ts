@@ -26,3 +26,15 @@ export const useAuth = () => {
 
   }, [wasInitAuthAttempt, isLogging, dispatch]);
 };
+
+export const useChatHub = () => {
+  const isAuthorized = useAppSelector(state => state.auth.isAuthorized);
+
+  React.useEffect(() => {
+    if (!isAuthorized) return;
+
+    
+  }, [isAuthorized]);
+
+  const owner = useAppSelector(state => state.chat.owner);
+}

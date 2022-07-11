@@ -1,11 +1,47 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using back.Contexts;
+using back.Models;
 
 namespace back.Services
 {
-	[ApiController]
-	[Route("api/[controller]")]
 	public class ChatService
 	{
+		private DataContext? DataContext { get; set; }
+		public ICollection<ChatMessage>? GetMessages(int dialogId)
+		{
+			ChatDialog? dialog = GetChatDialog(dialogId);
+			if (dialog is null) return null;
 
+			try
+			{
+				using (this.DataContext = new DataContext())
+				{
+					return dialog.Messages?.ToArray();
+				}
+			}
+			catch (Exception ex)
+			{
+				LoggerService.ExceptionOccured(ex);
+				return null;
+			}
+		}
+		public ChatDialog? GetChatDialog(int dialogId)
+		{
+			try
+			{
+				using (this.DataContext = new DataContext())
+				{
+					return this.DataContext.ChatDialogs.Where(d => d.Id == dialogId).FirstOrDefault();
+				}
+			}
+			catch (Exception ex)
+			{
+				LoggerService.ExceptionOccured(ex);
+				return null;
+			}
+		}
+		public ChatUser? GetChatOwner()
+		{
+			return null;
+		}
 	}
 }

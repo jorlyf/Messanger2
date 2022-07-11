@@ -28,7 +28,7 @@ const $api = axios.create({
 });
 
 $api.interceptors.request.use(config => {
-  config.headers!.Authorization = localStorage.getItem("token") || "";
+  config.headers!.Token = localStorage.getItem("token") || "";
   return config;
 });
 

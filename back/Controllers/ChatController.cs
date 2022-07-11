@@ -13,5 +13,18 @@ namespace back.Controllers
 		{
 			return Ok();
 		}
+		[HttpGet]
+		[Route("GetMessages")]
+		public IActionResult GetMessages()
+		{
+			return Ok();
+		}
+		[HttpPost]
+		[Route("GetChatOwner")]
+		public IActionResult GetChatOwner()
+		{
+
+			return Ok();
+		}
 	}
 }

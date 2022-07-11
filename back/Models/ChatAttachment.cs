@@ -3,7 +3,9 @@
 	public class ChatAttachment
 	{
 		public int Id { get; set; }
+
 		public ChatAttachmentTypes Type { get; set; }
+
 		public string Url { get; set; }
 	}
 

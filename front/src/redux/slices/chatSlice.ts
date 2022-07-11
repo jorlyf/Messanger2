@@ -1,18 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 ///////////////////////////////////////////////
 import IChatOwner from "../../models/IChatOwner";
-import IChatUser from "../../models/IChatUser";
+import IChatDialog from "../../models/IChatDialog";
 
 interface IChatState {
   owner: IChatOwner | null;
-  currentChatUser: IChatUser | null;
-  chatUsers: IChatUser[];
+  currentChatDialog: IChatDialog | null;
+  chatDialogs: IChatDialog[];
+  isReadyForChatting: boolean;
 }
 
 const initialState: IChatState = {
   owner: null,
-  currentChatUser: null,
-  chatUsers: [],
+  currentChatDialog: null,
+  chatDialogs: [],
+  isReadyForChatting: false
 }
 
 const chatSlice = createSlice({
@@ -26,13 +28,25 @@ const chatSlice = createSlice({
         avatarUrl: action.payload.avatarUrl
       };
     },
-    changeUsername(state, action: PayloadAction<string>) {
+    setUsername(state, action: PayloadAction<string>) {
       if (state.owner === null) return;
       state.owner.username = action.payload;
     },
-    changeAvatarUrl(state, action: PayloadAction<string>) {
+    setAvatarUrl(state, action: PayloadAction<string>) {
       if (state.owner === null) return;
       state.owner.avatarUrl = action.payload;
+    },
+    setCurrentChatDialog(state, action: PayloadAction<IChatDialog>) {
+      state.currentChatDialog = action.payload;
+    },
+    setChatDialogs(state, action: PayloadAction<IChatDialog[]>) {
+      state.chatDialogs = action.payload;
+    },
+    addChatDialog(state, action: PayloadAction<IChatDialog>) {
+      state.chatDialogs.push(action.payload);
+    },
+    removeChatDialog(state, action: PayloadAction<IChatDialog>) {
+      state.chatDialogs.filter(d => d.id != action.payload.id);
     }
   }
 });

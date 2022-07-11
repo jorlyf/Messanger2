@@ -8,20 +8,23 @@ namespace back.Services
 {
 	public class JWTService
 	{
-		private readonly string SECRET_KEY = "xyuxyuxyuxyuxyuxyuxyuxyu";
-		private readonly long EXP_TIME = (long)TimeSpan.FromDays(30).TotalSeconds;
+		private readonly string SECRET_KEY = "&~n7m$^-+O(zvKaG|O~!*~jh#0pIlv})9YSJ#nkfQf+{Us0A]lCah;:E9Wz89u&";
+		private readonly double EXP_TIME = TimeSpan.FromDays(30).TotalSeconds;
 		public string GenerateToken(User user)
 		{
+			DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			double now = Math.Round((DateTime.UtcNow - unixEpoch).TotalSeconds);
 			var payload = new Dictionary<string, object>()
 			{
 				{"id", user.Id},
 				{"login", user.Login},
-				{"exp", Utils.TotalSecondsNow}
+				{"exp", now + this.EXP_TIME}
 			};
 			return JsonWebToken.Encode(payload, this.SECRET_KEY, JwtHashAlgorithm.HS256);
 		}
 		public User? DecodeToken(string token)
 		{
+			if (string.IsNullOrEmpty(token)) return null;
 			try
 			{
 				var payload = JsonWebToken.DecodeToObject(token, this.SECRET_KEY) as IDictionary<string, object>;
@@ -31,43 +34,23 @@ namespace back.Services
 				{
 					if (payload.TryGetValue("id", out object? idObj))
 					{
-						int id = (int)idObj;
+						int id = (int)(long)idObj;
 						return dataContext.Users.ToArray().FirstOrDefault(u => u.Id == id);
 					}
 					else return null;
 				}
 			}
-			catch (SignatureVerificationException)
+			catch (SignatureVerificationException ex)
 			{
+				Console.WriteLine("Ошибка при декодировании токена");
+				Console.WriteLine(ex.Message);
 				return null;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				Console.WriteLine("Ошибка при декодировании токена");
+				Console.WriteLine(ex.Message);
 				return null;
-			}
-		}
-		public bool ValidateToken(string token)
-		{
-			try
-			{
-				var payload = JsonWebToken.DecodeToObject(token, this.SECRET_KEY) as IDictionary<string, object>;
-				if (payload is null) return false;
-
-				if (payload.TryGetValue("exp", out object? exp))
-				{
-					if (Utils.TotalSecondsNow - (long)exp > this.EXP_TIME) return false;
-				}
-				else return false;
-
-				return true;
-			}
-			catch (SignatureVerificationException)
-			{
-				return false;
-			}
-			catch (Exception)
-			{
-				return false;
 			}
 		}
 	}

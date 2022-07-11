@@ -3,13 +3,13 @@ using back.Models;
 
 namespace back.Services
 {
-	public class UserService
+	public class ChatManager
 	{
 		public SynchronizedCollection<ChatUser> ChatUsers { get; }
 
 		public Action? OnUserAdd;
 		public Action? OnUserRemove;
-		public UserService()
+		public ChatManager()
 		{
 			this.ChatUsers = new SynchronizedCollection<ChatUser>();
 		}
@@ -45,5 +45,7 @@ namespace back.Services
 			if (GetChatUserById(id) is not null) return true;
 			return false;
 		}
+
+
 	}
 }
