@@ -1,9 +1,13 @@
-import styles from "./LeftColumnHeader.module.scss";
+import useAppSelector from "../../hooks/useAppSelector";
+import styles from "./RightColumnHeader.module.scss";
 
 const RightColumnHeader: React.FC = () => {
+
+  const currentChatDialog = useAppSelector(state => state.chat.currentChatDialog);
+
   return (
     <header className={styles.Main}>
-      текущий собеседник
+      {currentChatDialog && <>{currentChatDialog.id}</>}
     </header>
   );
 }

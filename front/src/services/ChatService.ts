@@ -5,19 +5,15 @@ import IChatDialog from "../models/IChatDialog";
 import IChatMessage from "../models/IChatMessage";
 
 export default class ChatService {
-  sendMessage(dialog: IChatDialog, message: IChatMessage) {
+  static sendMessage = async (dialog: IChatDialog, message: IChatMessage) => {
 
   }
 
-  getChatDialogs() {
-
+  static getChatDialogs = async () => {
+    const response = await $api.get("/Chat/");
   }
 
-  getMessages(dialog: IChatDialog) {
+  static getMessages = async (dialog: IChatDialog) => {
 
-  }
-
-  getOwner(dispatch: AppDispatch, token: string) {
-    $api.post("/", token);
   }
 }

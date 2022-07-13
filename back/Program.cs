@@ -48,7 +48,7 @@ else
 
 app.UseHttpsRedirection();
 
-app.MapHub<ChatHub>("/ChatHub");
+app.MapHub<ChatHub>("/api/ChatHub");
 app.MapControllers();
 
 app.Run();

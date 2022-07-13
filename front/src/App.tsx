@@ -1,19 +1,23 @@
 import { Routes, Route } from "react-router-dom";
-import { useAppSelector, useAuth } from "./hooks";
-
+//////////////\
 import MainContainer from "./containers/MainContainer";
 import ChatList from "./components/ChatList";
 import LeftColumnHeader from "./components/LeftColumnHeader";
 import RightColumnHeader from "./components/RightColumnHeader";
-
+//////////////\
+import useAppSelector from "./hooks/useAppSelector";
+import useAuth from "./hooks/useAuth";
+import useChatHub from "./hooks/useChatHub";
+//////////////\
 import Chat from "./pages/Chat";
 import Auth from "./pages/Auth";
-
+//////////////\
 import styles from "./App.module.scss";
 
 const App: React.FC = () => {
 
   useAuth();
+  useChatHub();
 
   const wasInitAuthAttempt = useAppSelector(state => state.auth.wasInitAuthAttempt);
 

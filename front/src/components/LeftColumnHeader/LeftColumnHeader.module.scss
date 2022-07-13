@@ -2,4 +2,21 @@
   grid-row: 1;
 
   border-bottom: 1px solid black;
+
+  display    : flex;
+  align-items: center;
+
+  .LoginLink {
+    margin-left: 12px;
+  }
+
+
+  .UserAvatar {
+    margin-left: 12px;
+    width      : 36px;
+  }
+
+  .UserLogin {
+    margin-left: 8px;
+  }
 }

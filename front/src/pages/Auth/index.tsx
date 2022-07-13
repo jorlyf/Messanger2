@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import InputField from "../../components/InputField";
-import { useAppSelector } from "../../hooks";
+import useAppSelector from "../../hooks/useAppSelector";
 import AuthService from "../../services/AuthService";
 
 import styles from "./Auth.module.scss";

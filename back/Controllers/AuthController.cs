@@ -21,21 +21,14 @@ namespace back.Controllers
 		[HttpPost]
 		[Route("LoginByToken")]
 		public IActionResult LoginByToken([FromHeader] string token)
-		{		
+		{
 			User? user = this.AuthService.LoginByToken(token).Result;
 			if (user is null) return Unauthorized();
 
-
-			UserLoginSuccessDataDto userLoginSuccessData = new()
-			{
-				Id = user.Id,
-				Login = user.Login,
-				Token = token
-			};
-
 			LoggerService.UserLoggedIn(user);
-			return Ok(userLoginSuccessData);
+			return Ok(GetUserLoginSuccessDataDto(user, token));
 		}
+
 		[HttpPost]
 		[Route("Login")]
 		public IActionResult Login([FromBody] UserLoginDataDto userLoginData)
@@ -44,15 +37,9 @@ namespace back.Controllers
 			if (user is null) return BadRequest();
 
 			string token = this.JWTService.GenerateToken(user);
-			UserLoginSuccessDataDto userLoginSuccessData = new()
-			{
-				Id = user.Id,
-				Login = userLoginData.Login,
-				Token = token
-			};
 
 			LoggerService.UserLoggedIn(user);
-			return Ok(userLoginSuccessData);
+			return Ok(GetUserLoginSuccessDataDto(user, token));
 		}
 
 		[HttpPost]
@@ -63,15 +50,19 @@ namespace back.Controllers
 			if (user is null) return BadRequest();
 
 			string token = this.JWTService.GenerateToken(user);
-			UserLoginSuccessDataDto userLoginSuccessData = new()
-			{
-				Id = user.Id,
-				Login = userLoginData.Login,
-				Token = token
-			};
 
 			LoggerService.UserLoggedIn(user);
-			return Ok(userLoginSuccessData);
+			return Ok(GetUserLoginSuccessDataDto(user, token));
 		}
+
+		private UserLoginSuccessDataDto GetUserLoginSuccessDataDto(User? user, string token) =>
+			new UserLoginSuccessDataDto
+			{
+				Id = user.Id,
+				Login = user.Login,
+				Username = user.Username,
+				AvatarUrl = user.AvatarUrl,
+				Token = token
+			};
 	}
 }

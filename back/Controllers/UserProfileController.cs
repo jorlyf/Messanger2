@@ -1,47 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
 using back.Services;
 using back.Models;
+using back.Infrastructure;
 
 namespace back.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class UserProfileController : ControllerBase
+	public class UserProfileController : ControllerBaseTokenRequired
 	{
-		private JWTService JWTService { get; }
-		public UserProfileController(JWTService jwtService)
+		private UserProfileService UserProfileService { get; }
+		public UserProfileController(JWTService jwtService, UserProfileService userProfileService) : base(jwtService)
 		{
-			this.JWTService = jwtService;
+			this.UserProfileService = userProfileService;
 		}
 
 		[HttpPost]
 		[Route("SetUsername")]
-		public IActionResult SetUsername([FromBody] string newUsername)
+		public IActionResult SetUsername([FromBody] IDictionary<string, string> newUsernameJson)
 		{
-			if (!ValidateToken(out User? user)) return Unauthorized();
+			string newUsername = newUsernameJson.Values.First();
+			if (!ValidateToken(out User user)) return Unauthorized();
 
-			Console.WriteLine($"Получен username = {newUsername}");
-
-			return Ok();
-		}
-
-		private bool ValidateToken(out User? user)
-		{
-			user = null;
-			try
+			if (this.UserProfileService.ChangeUsername(user.Id, newUsername).Result)
 			{
-				if (!this.Request.Headers.TryGetValue("Token", out StringValues token))
-					return false;
-
-				user = this.JWTService.DecodeToken(token);
-				return true;
+				return Ok(newUsername);
 			}
-			catch (Exception ex)
-			{
-				LoggerService.ExceptionOccured(ex);
-				return false;
-			}
+			return BadRequest();
 		}
 	}
 }

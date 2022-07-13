@@ -1,7 +1,14 @@
-const ChatListItem: React.FC = () => {
+interface IChatListItem {
+  avatarUrl?: string;
+  chatDialogName?: string;
+  notificationsCount?: number;
+}
+
+const ChatListItem: React.FC<IChatListItem> = ({ avatarUrl, chatDialogName, notificationsCount }) => {
   return (
     <div>
-      <p>Вася</p>
+      {avatarUrl && <img src={avatarUrl} alt="" />}
+      {chatDialogName && <span>{chatDialogName}</span>}
     </div>
   );
 }

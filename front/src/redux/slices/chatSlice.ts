@@ -21,7 +21,7 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setOwnerUser(state, action: PayloadAction<{ id: number, username: string, avatarUrl: string }>) {
+    setOwnerUser(state, action: PayloadAction<{ id: number, username?: string, avatarUrl?: string }>) {
       state.owner = {
         id: action.payload.id,
         username: action.payload.username,
@@ -46,9 +46,19 @@ const chatSlice = createSlice({
       state.chatDialogs.push(action.payload);
     },
     removeChatDialog(state, action: PayloadAction<IChatDialog>) {
-      state.chatDialogs.filter(d => d.id != action.payload.id);
+      state.chatDialogs.filter(d => d.id !== action.payload.id);
     }
   }
 });
+
+export const {
+  setOwnerUser,
+  setUsername,
+  setAvatarUrl,
+  setCurrentChatDialog,
+  setChatDialogs,
+  addChatDialog,
+  removeChatDialog
+} = chatSlice.actions;
 
 export default chatSlice.reducer;

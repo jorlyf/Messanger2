@@ -12,5 +12,7 @@ namespace back.Models
 		public string? Text { get; set; }
 
 		public ChatAttachment[]? Attachments { get; set; }
+
+		public DateTime SentAt { get; set; }
 	}
 }

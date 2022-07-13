@@ -15,9 +15,9 @@ export enum ResponseStatus {
 
 const getBaseUrl = () => {
   if (process.env.NODE_ENV === NodeEnv.production) {
-    return "/api/";
+    return "/api";
   } else {
-    return "https://localhost:7115";
+    return "https://localhost:7115/api";
   }
 }
 
