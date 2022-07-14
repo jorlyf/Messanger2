@@ -1,36 +1,20 @@
-﻿using back.Contexts;
-using back.Models;
+﻿using back.Models;
+using back.Repositories;
 
 namespace back.Services
 {
 	public class ChatService
 	{
-		private DataContext? DataContext { get; set; }
-		public ICollection<ChatMessage>? GetMessages(int dialogId)
-		{
-			ChatDialog? dialog = GetChatDialog(dialogId);
-			if (dialog is null) return null;
+		private IRepository<ChatDialog>? DialogRepository { get; set; }
+		private IRepository<User>? UserRepository { get; set; }
 
-			try
-			{
-				using (this.DataContext = new DataContext())
-				{
-					return dialog.Messages?.ToArray();
-				}
-			}
-			catch (Exception ex)
-			{
-				LoggerService.ExceptionOccured(ex);
-				return null;
-			}
-		}
 		public ChatDialog? GetChatDialog(int dialogId)
 		{
 			try
 			{
-				using (this.DataContext = new DataContext())
+				using (this.DialogRepository = new Repository<ChatDialog>())
 				{
-					return this.DataContext.ChatDialogs.Where(d => d.Id == dialogId).FirstOrDefault();
+					return this.DialogRepository.Get(dialogId);
 				}
 			}
 			catch (Exception ex)
@@ -39,35 +23,58 @@ namespace back.Services
 				return null;
 			}
 		}
-		public ChatDialog[] GetChatDialogs(User user)
+		public IEnumerable<ChatMessage> GetMessages(int dialogId)
 		{
+			ChatDialog? dialog = GetChatDialog(dialogId);
+			if (dialog is null) return Enumerable.Empty<ChatMessage>();
+
 			try
 			{
-				using (this.DataContext = new DataContext())
+				using (this.DialogRepository = new Repository<ChatDialog>())
 				{
-					return this.DataContext.ChatDialogs.Where(d => d.Users.Contains(user)).ToArray();
+					if (dialog.Messages is null) return Enumerable.Empty<ChatMessage>();
+
+					return dialog.Messages.ToList();
 				}
 			}
 			catch (Exception ex)
 			{
 				LoggerService.ExceptionOccured(ex);
-				return new ChatDialog[0];
+				return Enumerable.Empty<ChatMessage>();
 			}
 		}
-
-		public User[] GetUsersByLogin(string login)
+		public IEnumerable<ChatDialog> GetChatDialogs(User user)
 		{
 			try
 			{
-				using (this.DataContext = new DataContext())
+				using (this.DialogRepository = new Repository<ChatDialog>())
 				{
-					return this.DataContext.Users.Where(d => d.Login.Contains(login)).ToArray();
+					IEnumerable<ChatDialog> dialogs = this.DialogRepository.GetMany(x => x.Users.Contains(user));
+					if (dialogs is null) return Enumerable.Empty<ChatDialog>();
+
+					return dialogs;
 				}
 			}
 			catch (Exception ex)
 			{
 				LoggerService.ExceptionOccured(ex);
-				return new User[0];
+				return Enumerable.Empty<ChatDialog>();
+			}
+		}
+		public IEnumerable<User> GetUsersByContainsLogin(string login)
+		{
+			try
+			{
+				using (this.UserRepository = new Repository<User>())
+				{
+					return this.UserRepository.GetMany(x => x.Login.Contains(login));
+				}
+
+			}
+			catch (Exception ex)
+			{
+				LoggerService.ExceptionOccured(ex);
+				return Enumerable.Empty<User>();
 			}
 		}
 	}

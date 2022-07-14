@@ -1,82 +1,70 @@
-﻿using back.Contexts;
-using back.Models;
+﻿using back.Models;
+using back.Repositories;
 
 namespace back.Services
 {
 	public class UserProfileService
 	{
-		private DataContext? DataContext { get; set; }
+		private IRepository<User>? UserRepository { get; set; }
 
-		public async Task<bool> ChangeUsername(int userId, string newUsername)
+		public bool ChangeUsername(User user, string newUsername)
 		{
 			if (!ValidateUsernameLength(newUsername)) return false;
 
-			User? user;
 			try
 			{
-				using (this.DataContext = new DataContext())
+				using (this.UserRepository = new Repository<User>())
 				{
-					user = this.DataContext.Users.ToArray().FirstOrDefault(u => u.Id == userId);
-					if (user is null) return false;
-
 					user.Username = newUsername;
-					await this.DataContext.SaveChangesAsync();
+					this.UserRepository.Update(user);
+					this.UserRepository.Save();
+					return true;
 				}
 			}
 			catch (Exception)
 			{
 				return false;
 			}
-
-			return true;
 		}
-		public async Task<bool> ChangePassword(int userId, string newPassword)
+		public bool ChangePassword(User user, string newPassword)
 		{
 			if (!ValidatePasswordLength(newPassword)) return false;
 
-			User? user;
 			try
 			{
-				using (this.DataContext = new DataContext())
+				using (this.UserRepository = new Repository<User>())
 				{
-					user = this.DataContext.Users.ToArray().FirstOrDefault(u => u.Id == userId);
-					if (user is null) return false;
-
 					user.Password = newPassword;
-					await this.DataContext.SaveChangesAsync();
+					this.UserRepository.Update(user);
+					this.UserRepository.Save();
+					return true;
 				}
 			}
 			catch (Exception)
 			{
 				return false;
 			}
-
-			return true;
 		}
-		public async Task<bool> ChangeAvatarUrl(int userId, string newAvatarUrl)
+		public bool ChangeAvatarUrl(User user, string newAvatarUrl)
 		{
-			User? user;
 			try
 			{
-				using (this.DataContext = new DataContext())
+				using (this.UserRepository = new Repository<User>())
 				{
-					user = this.DataContext.Users.ToArray().FirstOrDefault(u => u.Id == userId);
-					if (user is null) return false;
-
 					user.AvatarUrl = newAvatarUrl;
-					await this.DataContext.SaveChangesAsync();
+					this.UserRepository.Update(user);
+					this.UserRepository.Save();
+					return true;
 				}
 			}
 			catch (Exception)
 			{
 				return false;
 			}
-
-			return true;
 		}
-		public async Task<bool> UploadAvatar(IFormFile file)
+		public bool ChangeAvatar(User user, IFormFile file)
 		{
-			return true;
+			throw new NotImplementedException();
 		}
 
 		private bool ValidateUsernameLength(string username) => username.Length >= 2 && username.Length <= 24;

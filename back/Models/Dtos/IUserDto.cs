@@ -1,4 +1,4 @@
-﻿namespace back.Models
+﻿namespace back.Models.Dtos
 {
 	public class IUserDto
 	{

@@ -22,10 +22,11 @@ namespace back.Controllers
 			string newUsername = newUsernameJson.Values.First();
 			if (!ValidateToken(out User user)) return Unauthorized();
 
-			if (this.UserProfileService.ChangeUsername(user.Id, newUsername).Result)
+			if (this.UserProfileService.ChangeUsername(user, newUsername))
 			{
 				return Ok(newUsername);
 			}
+
 			return BadRequest();
 		}
 	}

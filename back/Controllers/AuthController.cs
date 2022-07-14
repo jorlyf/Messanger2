@@ -2,6 +2,7 @@
 
 using back.Models;
 using back.Services;
+using back.Models.Dtos;
 
 namespace back.Controllers
 {
@@ -22,7 +23,7 @@ namespace back.Controllers
 		[Route("LoginByToken")]
 		public IActionResult LoginByToken([FromHeader] string token)
 		{
-			User? user = this.AuthService.LoginByToken(token).Result;
+			User? user = this.AuthService.LoginByToken(token);
 			if (user is null) return Unauthorized();
 
 			LoggerService.UserLoggedIn(user);
@@ -33,7 +34,7 @@ namespace back.Controllers
 		[Route("Login")]
 		public IActionResult Login([FromBody] UserLoginDataDto userLoginData)
 		{
-			User? user = this.AuthService.Login(userLoginData).Result;
+			User? user = this.AuthService.Login(userLoginData);
 			if (user is null) return BadRequest();
 
 			string token = this.JWTService.GenerateToken(user);
@@ -46,7 +47,7 @@ namespace back.Controllers
 		[Route("Registrate")]
 		public IActionResult Registrate([FromBody] UserLoginDataDto userLoginData)
 		{
-			User? user = this.AuthService.Registrate(userLoginData).Result;
+			User? user = this.AuthService.Registrate(userLoginData);
 			if (user is null) return BadRequest();
 
 			string token = this.JWTService.GenerateToken(user);

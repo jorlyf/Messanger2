@@ -1,61 +1,54 @@
-﻿using back.Contexts;
-using back.Models;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using back.Models;
+using back.Models.Dtos;
+using back.Repositories;
 
 namespace back.Services
 {
 	public class AuthService
 	{
-		private DataContext? DataContext { get; set; }
+		private IRepository<User>? UserRepository { get; set; }
 		private JWTService JWTService { get; }
+
 		public AuthService(JWTService jwtService)
 		{
 			this.JWTService = jwtService;
 		}
-		public async Task<User?> LoginByToken(string token)
+
+		public User? LoginByToken(string token)
 		{
 			User? user = this.JWTService.DecodeToken(token);
-			if (user is null) return null;
-
 			return user;
 		}
-		public async Task<User?> Login(UserLoginDataDto userLoginData)
+		public User? Login(UserLoginDataDto userLoginData)
 		{
 			try
 			{
-				User? user;
-				using (this.DataContext = new DataContext())
+				using (this.UserRepository = new Repository<User>())
 				{
-					user = this.DataContext.Users.ToArray().FirstOrDefault(u => u.Login == userLoginData.Login);
-				}
-				if (user is null) return null;
+					User? user = this.UserRepository.Get(x => x.Login == userLoginData.Login);
+					if (user?.Password == userLoginData.Password) return user;
 
-				if (user.Password == userLoginData.Password) return user;
-				else return null;
+					return null;
+				}
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("Ошибка в AuthService.Login()");
-				Console.WriteLine(ex.Message);
+				LoggerService.ExceptionOccured(ex);
 				return null;
 			}
 		}
-		public async Task<User?> Registrate(UserLoginDataDto userReg)
+		public User? Registrate(UserLoginDataDto userReg)
 		{
 			try
 			{
-				EntityEntry<User> userEntity;
-				using (this.DataContext = new DataContext())
+				using (this.UserRepository = new Repository<User>())
 				{
 					if (!ValidateRegistration(userReg)) return null;
-					userEntity = await this.DataContext.Users.AddAsync(new User
-					{
-						Login = userReg.Login,
-						Password = userReg.Password
-					});
-					await this.DataContext.SaveChangesAsync();
+					User user = GetUser(userReg);
+					this.UserRepository.Add(user);
+					this.UserRepository.Save();
+					return user;
 				}
-				return userEntity.Entity;
 			}
 			catch (Exception ex)
 			{
@@ -67,11 +60,14 @@ namespace back.Services
 
 		private bool ValidateRegistration(UserLoginDataDto userReg)
 		{
-			// validate login
-			if (this.DataContext!.Users.ToArray().FirstOrDefault(u => u.Login.Trim() == userReg.Login.Trim()) is not null)
-				return false;
+			User? user = this.UserRepository!.Get(x => x.Login == userReg.Login);
+			if (user is not null) return false;
 
 			return true;
+		}
+		private static User GetUser(UserLoginDataDto userReg)
+		{
+			return new User { Login = userReg.Login, Password = userReg.Password };
 		}
 	}
 }

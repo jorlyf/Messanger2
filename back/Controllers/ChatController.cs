@@ -2,6 +2,7 @@
 using back.Models;
 using back.Infrastructure;
 using back.Services;
+using back.Models.Dtos;
 
 namespace back.Controllers
 {
@@ -10,10 +11,13 @@ namespace back.Controllers
 	public class ChatController : ControllerBaseTokenRequired
 	{
 		private ChatService ChatService { get; }
+
 		public ChatController(JWTService jwtService, ChatService chatService) : base(jwtService)
 		{
 			this.ChatService = chatService;
 		}
+
+
 		[HttpPost]
 		[Route("SendMessage")]
 		public IActionResult SendMessage([FromForm] ChatMessageSendingDto messsageDto)
@@ -31,9 +35,9 @@ namespace back.Controllers
 		{
 			if (!ValidateToken(out User user)) return Unauthorized();
 
-			ChatDialog[] chatDialogs = this.ChatService.GetChatDialogs(user);
+			IEnumerable<ChatDialog> chatDialogs = this.ChatService.GetChatDialogs(user);
 
-			ChatDialogDto[] dtos = new ChatDialogDto[chatDialogs.Length];
+			IList<ChatDialogDto> dtos = new ChatDialogDto[chatDialogs.Count()];
 			int i = 0;
 			foreach (ChatDialog d in chatDialogs)
 			{
@@ -81,7 +85,7 @@ namespace back.Controllers
 			if (!ValidateToken(out User user)) return Unauthorized();
 			if (string.IsNullOrEmpty(login)) return BadRequest();
 
-			this.ChatService.GetUsersByLogin(login);
+			this.ChatService.GetUsersByContainsLogin(login);
 			throw new NotImplementedException();
 		}
 	}

@@ -1,5 +1,5 @@
-﻿namespace back.Models
-{
+﻿namespace back.Models.Dtos
+{ 
 	public class ChatMessageSendingDto
 	{
 		public int ChatDialogId { get; set; }
