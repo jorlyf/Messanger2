@@ -4,7 +4,7 @@ import { trimString } from '../../utils';
 interface IInputField {
   value: string;
   dispatchFunction: (value: string) => void;
-  placeholder: string;
+  placeholder?: string;
   handleEnter?: () => void;
   minRows?: number;
   maxRows?: number;
@@ -12,7 +12,7 @@ interface IInputField {
   isOneRow?: boolean;
 }
 
-const InputField = ({ value, dispatchFunction, placeholder, handleEnter, minRows = 1, maxRows = 4, disabled = false, isOneRow = false }: IInputField) => {
+const InputField = ({ value, dispatchFunction, handleEnter, placeholder = "", minRows = 1, maxRows = 4, disabled = false, isOneRow = false }: IInputField) => {
   const handleChange = (e: any) => {
     dispatchFunction(e.target.value);
   }

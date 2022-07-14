@@ -23,9 +23,10 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setOwnerUser(state, action: PayloadAction<{ id: number, username?: string, avatarUrl?: string }>) {
+    setOwnerUser(state, action: PayloadAction<{ id: number, login: string, username?: string, avatarUrl?: string }>) {
       state.owner = {
         id: action.payload.id,
+        login: action.payload.login,
         username: action.payload.username,
         avatarUrl: action.payload.avatarUrl
       };

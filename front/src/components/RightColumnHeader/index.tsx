@@ -1,5 +1,6 @@
+import UserSearchContainer from "../../containers/UserSearchContainer";
 import useAppSelector from "../../hooks/useAppSelector";
-import Search from "../Search";
+
 import styles from "./RightColumnHeader.module.scss";
 
 const RightColumnHeader: React.FC = () => {
@@ -10,7 +11,11 @@ const RightColumnHeader: React.FC = () => {
   return (
     <header className={styles.Main}>
       {currentChatDialog && <>{currentChatDialog.id}</>}
-      {isAuthorized && <Search />}
+      {isAuthorized &&
+        <div className={styles.UserSearch}>
+          <UserSearchContainer />
+        </div>
+      }
     </header>
   );
 }

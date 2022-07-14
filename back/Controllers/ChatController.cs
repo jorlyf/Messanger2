@@ -73,5 +73,16 @@ namespace back.Controllers
 
 			return Ok();
 		}
+
+		[HttpGet]
+		[Route("GetUsersByLogin")]
+		public IActionResult GetUsersByLogin(string login)
+		{
+			if (!ValidateToken(out User user)) return Unauthorized();
+			if (string.IsNullOrEmpty(login)) return BadRequest();
+
+			this.ChatService.GetUsersByLogin(login);
+			throw new NotImplementedException();
+		}
 	}
 }

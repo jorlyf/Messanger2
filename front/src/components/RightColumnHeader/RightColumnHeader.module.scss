@@ -2,7 +2,12 @@
   grid-row: 1;
 
   border-bottom: 1px solid black;
-  
+
   display    : flex;
   align-items: center;
+
+  .UserSearch {
+    margin-left : auto;
+    margin-right: 4%;
+  }
 }

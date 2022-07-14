@@ -54,5 +54,21 @@ namespace back.Services
 				return new ChatDialog[0];
 			}
 		}
+
+		public User[] GetUsersByLogin(string login)
+		{
+			try
+			{
+				using (this.DataContext = new DataContext())
+				{
+					return this.DataContext.Users.Where(d => d.Login.Contains(login)).ToArray();
+				}
+			}
+			catch (Exception ex)
+			{
+				LoggerService.ExceptionOccured(ex);
+				return new User[0];
+			}
+		}
 	}
 }

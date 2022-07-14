@@ -64,6 +64,6 @@ export default class AuthService {
 
   static onSuccessLogin = (dispatch: AppDispatch, data: IUserLoginSuccessDataDto) => {
     dispatch(loginSuccess({ login: data.login, token: data.token }));
-    dispatch(setOwnerUser({ id: data.id, username: data.username, avatarUrl: data.avatarUrl }));
+    dispatch(setOwnerUser({ id: data.id, login: data.login, username: data.username, avatarUrl: data.avatarUrl }));
   }
 }
