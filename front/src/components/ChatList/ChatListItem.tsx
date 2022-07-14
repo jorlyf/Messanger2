@@ -1,14 +1,16 @@
+import IChatDialog from "../../models/IChatDialog";
+
+import styles from "./ChatList.module.scss";
+
 interface IChatListItem {
-  avatarUrl?: string;
-  chatDialogName?: string;
-  notificationsCount?: number;
+  chatDialog: IChatDialog;
 }
 
-const ChatListItem: React.FC<IChatListItem> = ({ avatarUrl, chatDialogName, notificationsCount }) => {
+const ChatListItem: React.FC<IChatListItem> = ({ chatDialog }) => {
   return (
-    <div>
-      {avatarUrl && <img src={avatarUrl} alt="" />}
-      {chatDialogName && <span>{chatDialogName}</span>}
+    <div key={chatDialog.id} className={styles.Item}>
+      {chatDialog.avatarUrl && <img src={chatDialog.avatarUrl} alt="" />}
+      {chatDialog.name && <span>{chatDialog.name}</span>}
     </div>
   );
 }

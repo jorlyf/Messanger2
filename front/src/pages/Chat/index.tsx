@@ -22,6 +22,7 @@ const Chat: React.FC = () => {
 
   return (
     <div className={styles.Main}>
+      
     </div>
   );
 }

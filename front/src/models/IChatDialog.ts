@@ -5,4 +5,6 @@ export default interface IChatDialog {
   id: number;
   messages: IChatMessage[];
   users: IChatUser[];
+  name: string;
+  avatarUrl: string;
 }

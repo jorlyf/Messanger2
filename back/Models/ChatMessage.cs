@@ -6,6 +6,8 @@ namespace back.Models
 	{
 		public int Id { get; set; }
 
+		public int ChatDialogid { get; set; }
+
 		[Required]
 		public User Sender { get; set; }
 

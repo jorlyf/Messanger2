@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   if (isAuthorized) {
     return (
       <header className={styles.Main}>
-        <BurgerMenu items={[{ text: "Выйти", onClick: AuthService.logout }]}
+        <BurgerMenu items={[{ text: "Профиль", onClick: () => { } }, { text: "Выйти", onClick: AuthService.logout }]}
         />
         <img className={styles.UserAvatar} alt="" />
         <span className={styles.UserLogin}>{login}</span>

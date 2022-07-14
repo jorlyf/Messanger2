@@ -35,7 +35,7 @@ const authSlice = createSlice({
       state.isLogging = false;
       state.login = "";
       state.token = "";
-      localStorage.removeItem("token");
+      //localStorage.removeItem("token");
       state.isAuthorized = false;
       state.wasInitAuthAttempt = true;
     },

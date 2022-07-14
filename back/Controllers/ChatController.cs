@@ -31,9 +31,36 @@ namespace back.Controllers
 		{
 			if (!ValidateToken(out User user)) return Unauthorized();
 
-			
+			ChatDialog[] chatDialogs = this.ChatService.GetChatDialogs(user);
 
-			return Ok();
+			ChatDialogDto[] dtos = new ChatDialogDto[chatDialogs.Length];
+			int i = 0;
+			foreach (ChatDialog d in chatDialogs)
+			{
+				ChatDialogDto dto = new();
+				dto.Id = d.Id;
+				dto.Name = d.Name;
+				dto.AvatarUrl = d.AvatarUrl;
+
+
+				dto.UserIds = d.Users.Select(u => u.Id).ToArray();
+				ChatMessageDto[] messageDtos = new ChatMessageDto[d.Messages.Length];
+				int j = 0;
+				foreach (ChatMessage cm in d.Messages)
+				{
+					ChatMessageDto cmDto = new ChatMessageDto();
+					cmDto.Id = cm.Id;
+					cmDto.ChatDialogId = cm.ChatDialogid;
+					cmDto.UserSenderId = cm.Sender.Id;
+					cmDto.Text = cm.Text;
+					cmDto.Attachments = cm.Attachments;
+					cmDto.SentAt = cm.SentAt;
+					messageDtos[j++] = cmDto;
+				}
+				dtos[i++] = dto;
+			}
+
+			return Ok(dtos);
 		}
 
 		[HttpGet]

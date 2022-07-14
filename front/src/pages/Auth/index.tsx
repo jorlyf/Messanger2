@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
 import InputField from "../../components/InputField";
 import useAppSelector from "../../hooks/useAppSelector";
@@ -9,6 +10,7 @@ import styles from "./Auth.module.scss";
 
 const Auth: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [login, setLogin] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
@@ -26,9 +28,9 @@ const Auth: React.FC = () => {
     AuthService.registration(dispatch, login, password);
   }
 
-  if (isAuthorized) {
-    return (<>Вы уже в аккаунте</>);
-  }
+  React.useEffect(() => {
+    if (isAuthorized) { navigate("/"); }
+  }, [isAuthorized, navigate]);
 
   return (
     <div className={styles.Main}>

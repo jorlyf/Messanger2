@@ -8,13 +8,15 @@ interface IChatState {
   currentChatDialog: IChatDialog | null;
   chatDialogs: IChatDialog[];
   isReadyForChatting: boolean;
+  isConnectedChatHub: boolean;
 }
 
 const initialState: IChatState = {
   owner: null,
   currentChatDialog: null,
   chatDialogs: [],
-  isReadyForChatting: false
+  isReadyForChatting: false,
+  isConnectedChatHub: false
 }
 
 const chatSlice = createSlice({
@@ -47,6 +49,9 @@ const chatSlice = createSlice({
     },
     removeChatDialog(state, action: PayloadAction<IChatDialog>) {
       state.chatDialogs.filter(d => d.id !== action.payload.id);
+    },
+    setIsConnectedChatHub(state, action: PayloadAction<boolean>) {
+      state.isConnectedChatHub = action.payload;
     }
   }
 });
@@ -58,7 +63,8 @@ export const {
   setCurrentChatDialog,
   setChatDialogs,
   addChatDialog,
-  removeChatDialog
+  removeChatDialog,
+  setIsConnectedChatHub
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

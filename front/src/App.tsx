@@ -35,9 +35,8 @@ const App: React.FC = () => {
 
             <MainContainer>
               <Routes>
-                <Route path="/" element={<Chat />} />
-                <Route path="/chat" element={<Chat />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="*"  element={<Chat />} />
               </Routes>
             </MainContainer>
           </div>

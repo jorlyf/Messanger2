@@ -1,10 +1,10 @@
 import styles from "./MainContainer.module.scss";
 
-interface IProps {
+interface IMainContainerProps {
   children: React.ReactNode;
 }
 
-const MainContainer: React.FC<IProps> = ({ children }) => {
+const MainContainer: React.FC<IMainContainerProps> = ({ children }) => {
   return (
     <div className={styles.Main}>
       {children}

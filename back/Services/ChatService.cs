@@ -39,9 +39,20 @@ namespace back.Services
 				return null;
 			}
 		}
-		public ChatUser? GetChatOwner()
+		public ChatDialog[] GetChatDialogs(User user)
 		{
-			return null;
+			try
+			{
+				using (this.DataContext = new DataContext())
+				{
+					return this.DataContext.ChatDialogs.Where(d => d.Users.Contains(user)).ToArray();
+				}
+			}
+			catch (Exception ex)
+			{
+				LoggerService.ExceptionOccured(ex);
+				return new ChatDialog[0];
+			}
 		}
 	}
 }
