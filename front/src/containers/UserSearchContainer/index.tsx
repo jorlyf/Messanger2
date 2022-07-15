@@ -1,34 +1,49 @@
 import React from "react";
 import Search from "../../components/Search";
-import SearchResult from "../../components/UserList";
+import UserList, { IItem } from "../../components/UserList";
 import useDebounce from "../../hooks/useDebounce";
-//////////////\
-import IChatUser from "../../models/IChatUser";
 import ChatService from "../../services/ChatService";
+import IChatUser from "../../models/IChatUser";
+
+import styles from "./UserSearchContainer.module.scss";
 
 const UserSearchContainer: React.FC = () => {
   const [login, setLogin] = React.useState("");
   const [users, setUsers] = React.useState<IChatUser[]>([]);
 
-  const onChangeValue = (newValue: string) => {
+  const getUserListItems = React.useCallback((): IItem[] => {
+    const items: IItem[] = [];
+    users.forEach(u => {
+      items.push({ user: u, handleClick: () => "" });
+    });
+    return items;
+  }, [users]);
+
+  const handleChangeValue = (newValue: string) => {
     setLogin(newValue);
     searchUsers(newValue);
   }
 
-  const searchUsers = useDebounce(async () => {
-    const users: IChatUser[] = await ChatService.searchUsersByLogin(login);
+  const searchUsers = useDebounce(async (login) => {
+    const users: IChatUser[] = await ChatService.searchUsersByContainsLogin(login);
     setUsers(users);
-  }, 500);
+  }, 250);
 
   return (
-    <>
-      <Search
-        value={login}
-        dispatchFunction={onChangeValue}
-        placeholder={"Введите логин"}
-      />
-      {users.length > 0 && <SearchResult items={users} />}
-    </>
+    <div className={styles.Main}>
+      <div className={styles.Search}>
+        <Search
+          value={login}
+          dispatchFunction={handleChangeValue}
+          placeholder={"Введите логин"}
+        />
+      </div>
+      {users.length > 0 &&
+        <div className={styles.SearchResult}>
+          <UserList items={getUserListItems()} />
+        </div>
+      }
+    </div>
   )
 }
 

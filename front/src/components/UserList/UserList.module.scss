@@ -1,8 +1,10 @@
 .Main {
-  display: flex;
+  display       : flex;
   flex-direction: column;
-  row-gap: 5px;
+  row-gap       : 5px;
+
   .Item {
-    
+    padding    : 4px;
+    padding-top: 1px;
   }
 }

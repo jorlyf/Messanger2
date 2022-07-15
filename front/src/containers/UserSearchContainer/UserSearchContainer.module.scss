@@ -1,0 +1,14 @@
+.Main {
+  position: relative;
+
+  .Search {}
+
+  .SearchResult {
+    position        : absolute;
+    background-color: var(--background-color);
+    width           : 100%;
+    box-sizing      : border-box;
+    border          : 1px solid black;
+
+  }
+}

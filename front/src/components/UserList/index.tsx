@@ -2,16 +2,25 @@ import IChatUser from "../../models/IChatUser";
 
 import styles from "./UserList.module.scss";
 
-const SearchResult: React.FC<{ items: IChatUser[] }> = ({ items }) => {
+export interface IItem {
+  user: IChatUser;
+  handleClick: () => void;
+}
+
+interface IUserListProps {
+  items: IItem[];
+}
+
+const UserList: React.FC<IUserListProps> = ({ items }) => {
   return (
     <div className={styles.Main}>
-      {items?.map(u => (
-        <div key={u.id} className={styles.Item}>
-          <span>{u.login}</span>
+      {items?.map(i => (
+        <div key={i.user.id} onClick={i.handleClick} className={styles.Item}>
+          <span>{i.user.login}</span>
         </div>
       ))}
     </div>
   )
 }
 
-export default SearchResult;
+export default UserList;

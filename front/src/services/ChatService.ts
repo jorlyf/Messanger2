@@ -14,13 +14,18 @@ export default class ChatService {
     //const response = await $api.get("/Chat/");
   }
 
+  static getChatDialog = async (id: number) => {
+    
+  }
+
   static getMessages = async (dialog: IChatDialog) => {
 
   }
 
-  static searchUsersByLogin = async (login: string) => {
+  static searchUsersByContainsLogin = async (login: string): Promise<IChatUser[]> => {
     try {
-      const response = await $api.get<IUserDto[]>(`/Chat/GetUsersByLogin?Login=${login}`);
+      if (!login) return [];
+      const response = await $api.get<IUserDto[]>(`/Chat/GetUsersByContainsLogin?Login=${login}`);
       if (response.status !== ResponseStatus.OK) { throw new Error(); }
 
       const users: IChatUser[] = [];
